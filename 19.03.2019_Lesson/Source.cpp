@@ -111,25 +111,26 @@ struct Man {
 	}
 	
 };
+// функция для динамического выделения памяти
 void add(Man*&ms, Man m) {
 	if (buffer_size == 0) // когда изначально буфер равен нулю
 	{
 		buffer_size = 4;
-		ms = new Man[buffer_size];
+		ms = new Man[buffer_size]; // выделение памяти на 4 ячейки - 4 cтруктуры Man
 	}
 	else
 	{
 		if (current_size == buffer_size)
 		{
 			buffer_size *= 2;
-			Man*tmp=new Man[buffer_size]; //выделение памяти на двухкратное количество элементов, т.е. запас
+			Man*tmp=new Man[buffer_size]; //перевыделение памяти на двухкратное количество элементов, т.е. запас
 			for (int i = 0; i < current_size; i++)
-				tmp[i] = ms[i];
+				tmp[i] = ms[i]; // копирование всех структур со старой области памяти
 			delete[] ms;
-			ms = tmp;
+			ms = tmp; //переобъявление
 		}
 	}
-	ms[current_size++] = m; //запись нулевого элемента и добавление текущего размера до 1 и далее по циклу
+	ms[current_size++] = m; //запись элемента и добавление текущего размера на 1 единицу - 1 структуру
 }
 void erase_last(Man*&ms) {
 	current_size--;
@@ -141,10 +142,10 @@ void erase_by_name(Man*&ms, const char*name) {
 	{
 		if (strcmp(ms[i].name, name) == 0) // если не полное совпадение имени нужно, то использовать strstr - если он сработал, то удалять
 		{
-			for (int j = i; j < current_size; j++)
+			for (int j = i; j < current_size; j++) // j=i : как только нашел совпадение, с этой позиции сдвигает вверх оставшиеся структуры в массиве
 			{
-				ms[j] = ms[j + 1];
-				i--;
+				ms[j] = ms[j + 1]; // копирование всех последующих структур после удаления искомой структуры из массива
+				i--; //чтобы не оставалось пустой строки
 			}
 			current_size--;
 		}
@@ -192,6 +193,8 @@ int main()
 			for (int i = 0; i < n; i++)
 					if (s[i].otlichniki() == true)
 						s[i].print();
+
+			cout << endl;
 
 			cout << "Двоечники:" << endl;
 			for (int i = 0; i < n; i++)
