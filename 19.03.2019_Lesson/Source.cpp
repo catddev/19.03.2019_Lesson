@@ -127,6 +127,26 @@ void add(Man*&ms, Man m) {
 	}
 	ms[current_size++] = m; //запись нулевого элемента и добавление текущего размера до 1 и далее по циклу
 }
+void erase_last(Man*&ms) {
+	current_size--;
+	if (current_size == 0)
+		delete[] ms;
+}
+void erase_by_name(Man*&ms, const char*name) {
+	for (int i = 0; i < current_size; i++)
+	{
+		if (strcmp(ms[i].name, name) == 0) // если не полное совпадение имени нужно, то использовать strstr
+		{
+			for (int j = i; j < current_size; j++)
+			{
+				ms[j] = ms[j + 1];
+				i--;
+			}
+			current_size--;
+		}
+		
+	}
+}
 
 int main()
 {
@@ -154,7 +174,7 @@ int main()
 			for (int i = 0; i < n; i++)
 			{
 				in_file.ignore();
-				in_file.getline(s[i].surname, 30, '#');
+				in_file.getline(s[i].surname, 30, '#'); //чтобы не до пробела, а до # считывал
 				in_file >> s[i].group;
 				for (int j = 0; j < 2; j++)
 				{
@@ -212,6 +232,9 @@ int main()
 					add(ms, tmp_man);
 				}
 			}
+			erase_last(ms);
+			erase_by_name(ms, "Karina");
+			erase_by_name(ms, "Liza");
 			for (int i = 0; i < current_size; i++)
 				ms[i].print();
 		}
