@@ -81,9 +81,13 @@ struct example {
 //7.***Описать структуру Man(Фамилия, Имя, Возраст, Дата рождения).Создать массив, предусмотреть:
 //-Вывод информации с сортировкой по фамилии или имени;
 //-Вывод списка именинников месяца с указанием даты рождения.
-//- Изменение размеров массива при добавлении и удалении записей;
+//-Изменение размеров массива при добавлении и удалении записей;
 //-Поиск по фамилии и имени;
 //-Редактирование записи.
+
+int current_size=0; //глобальная переменная для расширения-сужения динамического массива структур
+int buffer_size = 0;
+
 struct Date {
 	int day, month, year;
 	void print() {
@@ -95,9 +99,34 @@ struct Man {
 	char surname[30];
 	int age;
 	Date date_of_birth;
+
+	void print() {
+		cout << name << " " << surname << " " << age <<" ";
+		date_of_birth.print();
+		cout << endl;
+	}
 	
 };
-
+void add(Man*&ms, Man m) {
+	if (buffer_size == 0) // когда изначально буфер равен нулю
+	{
+		buffer_size = 4;
+		ms = new Man[buffer_size];
+	}
+	else
+	{
+		if (current_size == buffer_size)
+		{
+			buffer_size *= 2;
+			Man*tmp=new Man[buffer_size]; //выделение памяти на двухкратное количество элементов, т.е. запас
+			for (int i = 0; i < current_size; i++)
+				tmp[i] = ms[i];
+			delete[] ms;
+			ms = tmp;
+		}
+	}
+	ms[current_size++] = m; //запись нулевого элемента и добавление текущего размера до 1 и далее по циклу
+}
 
 int main()
 {
@@ -163,8 +192,28 @@ int main()
 		break;
 		case 3:
 		{
+			Man*ms=0; //нужно инициализировать через ноль, чтобы прога запустилась
+			Man tmp_man;
+			char c;
 			ifstream in_file("in2.txt");
+			if (!in_file)
+			{
+				cerr << "Enter open error" << endl;
+			}
+			else
+			{
+				while (!in_file.eof())
+				{
+					in_file >> tmp_man.name >> tmp_man.surname >> tmp_man.age >>
+						tmp_man.date_of_birth.day >> c
+						>> tmp_man.date_of_birth.month >> c
+						>> tmp_man.date_of_birth.year;
 
+					add(ms, tmp_man);
+				}
+			}
+			for (int i = 0; i < current_size; i++)
+				ms[i].print();
 		}
 		break;
 		case 4:
