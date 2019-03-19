@@ -12,6 +12,7 @@ using namespace std;
 // Создать массив студентов и написать программу, позволяющую:
 // -динамически изменять размер массива;
 // -выводить список отличников(> 75 % отл оценок);
+// -выводить список двоечников(> 50 % оценок 2 и 3);
 struct Mark {
 	char subject[50];
 	int grade[2];
@@ -36,35 +37,38 @@ struct Student {
 		cout << endl;
 	}
 	bool otlichniki() {
-		int d = 0;
+		int k = 0;
+		int two_sub = 0;
 		for (int i = 0; i < 2; i++)
 		{
-			int k = 0;
+			k = 0;
 			for (int j = 0; j < 2; j++)
 			{
 				if (marks[i].grade[j] >= 10)
 					k++;
 			}
-			
-			if (double(k) / 2 >= 0.75) d++;
-			
+			if (double(k) / 2 >= 0.75) //т.е. таких оценок больше 75%
+				two_sub++;
 		}
-		if (d >=1) return true;
+		if (two_sub >= 2) return true;
 		else return false;
 	}
 	bool dvoechniki() {
 		int k = 0;
+		int two_sub = 0;
 		for (int i = 0; i < 2; i++)
 		{
-			int k = 0;
+			k = 0;
 			for (int j = 0; j < 2; j++)
 			{
 				if (marks[i].grade[j] <= 6)
 					k++;
 			}
-			if (double(k) / 5 >= 0.5) return true;
-			else return false;
+			if (double(k) / 2 >= 0.5) //т.е. таких оценок(двоек и троек) больше 50%
+				two_sub++;
 		}
+		if (two_sub >= 2) return true;
+		else return false;
 	}
 };
 struct example {
@@ -135,7 +139,7 @@ void erase_last(Man*&ms) {
 void erase_by_name(Man*&ms, const char*name) {
 	for (int i = 0; i < current_size; i++)
 	{
-		if (strcmp(ms[i].name, name) == 0) // если не полное совпадение имени нужно, то использовать strstr
+		if (strcmp(ms[i].name, name) == 0) // если не полное совпадение имени нужно, то использовать strstr - если он сработал, то удалять
 		{
 			for (int j = i; j < current_size; j++)
 			{
@@ -144,7 +148,6 @@ void erase_by_name(Man*&ms, const char*name) {
 			}
 			current_size--;
 		}
-		
 	}
 }
 
@@ -178,7 +181,7 @@ int main()
 				in_file >> s[i].group;
 				for (int j = 0; j < 2; j++)
 				{
-					in_file >> s[i].marks[i].subject;
+					in_file >> s[i].marks[j].subject;
 						for (int p=0; p<2; p++)
 						{
 							in_file >> s[i].marks[j].grade[p];
@@ -187,12 +190,15 @@ int main()
 			}
 			cout << "Отличники:" << endl;
 			for (int i = 0; i < n; i++)
-				if (s[i].otlichniki() == true)
+					if (s[i].otlichniki() == true)
+						s[i].print();
+
+			cout << "Двоечники:" << endl;
+			for (int i = 0; i < n; i++)
+				if (s[i].dvoechniki() == true)
 					s[i].print();
 
-		/*	for (int i = 0; i < n; i++)
-				s[i].print();
-			cout << endl;*/
+			delete[] s;
 		}
 		break;
 		case 2:

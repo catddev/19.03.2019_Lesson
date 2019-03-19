@@ -1,4 +1,4 @@
 3
-Dinara Aikenova# SMP-182 ITE 12 10 C++ 11 9
-Torekhan Kuanyshev# SMB-181 ITE 12 11 C++ 12 8
-Liza Bystrova# SDP-182 ITE 10 8 C++ 12 10
+Dinara Aikenova# SMP-182 ITE 7 10 C++ 11 12
+Torekhan Kuanyshev# SMB-181 ITE 12 11 C++ 12 10
+Liza Bystrova# SDP-182 ITE 5 6 C++ 4 5
